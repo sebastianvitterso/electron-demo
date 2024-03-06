@@ -1,8 +1,29 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { TrackInfo } from 'spotify-node-applescript'
 
 // Custom APIs for renderer
-const api = {}
+export type Api = {
+  play: () => Promise<void>
+  pause: () => Promise<void>
+  playPause: () => Promise<void>
+  next: () => Promise<void>
+  previous: () => Promise<void>
+
+  isPlaying: () => Promise<boolean>
+  getTrack: () => Promise<TrackInfo>
+}
+
+export const api: Api = {
+  play: () => ipcRenderer.invoke('spotify:play'),
+  pause: () => ipcRenderer.invoke('spotify:pause'),
+  playPause: () => ipcRenderer.invoke('spotify:playPause'),
+  next: () => ipcRenderer.invoke('spotify:next'),
+  previous: () => ipcRenderer.invoke('spotify:previous'),
+
+  isPlaying: () => ipcRenderer.invoke('spotify:isPlaying'),
+  getTrack: () => ipcRenderer.invoke('spotify:getTrack')
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
