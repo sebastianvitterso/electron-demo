@@ -1,8 +1,13 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import 'hazardous'
+import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { registerSpotifyHandlers } from './spotifyHandlers'
+import path from 'path'
+
+const script = path.join(__dirname, 'get_state.applescript')
+console.log({ script })
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -13,10 +18,10 @@ function createWindow(): void {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
     },
     frame: false,
-    alwaysOnTop: true
+    alwaysOnTop: true,
   })
 
   mainWindow.on('ready-to-show', () => {
@@ -43,9 +48,6 @@ app.whenReady().then(() => {
   })
 
   registerSpotifyHandlers()
-
-  // TODO: IPC handler file
-  ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
 })

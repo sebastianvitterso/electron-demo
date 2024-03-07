@@ -22,7 +22,7 @@ export const api: Api = {
   previous: () => ipcRenderer.invoke('spotify:previous'),
 
   isPlaying: () => ipcRenderer.invoke('spotify:isPlaying'),
-  getTrack: () => ipcRenderer.invoke('spotify:getTrack')
+  getTrack: () => ipcRenderer.invoke('spotify:getTrack'),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
